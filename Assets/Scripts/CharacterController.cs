@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-public class CharacterController : MonoBehaviour
+public class CharacterController : EntityController
 {
 	[SerializeField] private float m_JumpForce = 400f;							// Amount of force added when the player jumps.
 	[Range(0, 1)] [SerializeField] private float m_CrouchSpeed = .4f;			// Amount of maxSpeed applied to crouching movement. 1 = 100%
@@ -17,10 +17,6 @@ public class CharacterController : MonoBehaviour
 	
 	private bool m_Grounded;            // Whether or not the player is grounded
 	private bool m_Falling;				// Whether or not the player is falling
-	
-	private Rigidbody2D m_Rigidbody2D;
-	private bool m_FacingRight = true;  // For determining which way the player is currently facing
-	private Vector3 m_Velocity = Vector3.zero;
 
 	[Header("Events")]
 	[Space]
@@ -47,8 +43,6 @@ public class CharacterController : MonoBehaviour
 
 		if (OnCrouchEvent == null)
 			OnCrouchEvent = new BoolEvent();
-		
-
 	}
 
 	private void FixedUpdate()
@@ -68,7 +62,6 @@ public class CharacterController : MonoBehaviour
 					OnLandEvent.Invoke();
 					m_Falling = false;
 				}
-					
 			}
 		}
 	}
@@ -148,16 +141,5 @@ public class CharacterController : MonoBehaviour
 			m_Falling = true;
 			OnFallEvent.Invoke();
 		}
-	}
-	
-	private void Flip()
-	{
-		// Switch the way the player is labelled as facing.
-		m_FacingRight = !m_FacingRight;
-
-		// Multiply the player's x local scale by -1.
-		Vector3 theScale = transform.localScale;
-		theScale.x *= -1;
-		transform.localScale = theScale;
 	}
 }
